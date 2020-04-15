@@ -275,7 +275,7 @@ class Points extends System {
 
       await getRepository(User).update({ username }, { points });
 
-      const message = await prepare('points.success.set', {
+      const message = prepare('points.success.set', {
         amount: points,
         username,
         pointsName: await this.getPointsName(points),
@@ -314,7 +314,7 @@ class Points extends System {
       const availablePoints = sender.points;
 
       if (points !== 'all' && availablePoints < points) {
-        const message = await prepare('points.failed.giveNotEnough'.replace('$command', opts.command), {
+        const message = prepare('points.failed.giveNotEnough'.replace('$command', opts.command), {
           amount: points,
           username,
           pointsName: await this.getPointsName(points),
@@ -325,7 +325,7 @@ class Points extends System {
           { ...guser, points: guser.points + availablePoints },
           { ...sender, points: 0 },
         ]);
-        const message = await prepare('points.success.give', {
+        const message = prepare('points.success.give', {
           amount: availablePoints,
           username,
           pointsName: await this.getPointsName(availablePoints),
@@ -336,7 +336,7 @@ class Points extends System {
           { ...guser, points: guser.points + points },
           { ...sender, points: sender.points - points },
         ]);
-        const message = await prepare('points.success.give', {
+        const message = prepare('points.success.give', {
           amount: points,
           username,
           pointsName: await this.getPointsName(points),
@@ -431,7 +431,7 @@ class Points extends System {
         order = Number(orderQuery[0].order) + 1;
       }
 
-      const message = await prepare('points.defaults.pointsResponse', {
+      const message = prepare('points.defaults.pointsResponse', {
         amount: this.maxSafeInteger(user.points),
         username: username,
         pointsName: await this.getPointsName(this.maxSafeInteger(user.points)),
@@ -452,14 +452,14 @@ class Points extends System {
       let message: string;
       if (points >= 0) {
         await getRepository(User).increment({}, 'points', points);
-        message = await prepare('points.success.online.positive', {
+        message = prepare('points.success.online.positive', {
           amount: points,
           pointsName: await this.getPointsName(points),
         });
       } else {
         points = Math.abs(points);
         await this.decrement({}, points);
-        message = await prepare('points.success.online.negative', {
+        message = prepare('points.success.online.negative', {
           amount: -points,
           pointsName: await this.getPointsName(points),
         });
@@ -479,14 +479,14 @@ class Points extends System {
       let message: string;
       if (points >= 0) {
         await getRepository(User).increment({}, 'points', points);
-        message = await prepare('points.success.all.positive', {
+        message = prepare('points.success.all.positive', {
           amount: points,
           pointsName: await this.getPointsName(points),
         });
       } else {
         points = Math.abs(points);
         await this.decrement({}, points);
-        message = await prepare('points.success.all.negative', {
+        message = prepare('points.success.all.negative', {
           amount: -points,
           pointsName: await this.getPointsName(points),
         });
@@ -511,7 +511,7 @@ class Points extends System {
 
         getRepository(User).increment({ userId: user.userId }, 'points', Math.floor(Math.random() * points));
       }
-      const message = await prepare('points.success.rain', {
+      const message = prepare('points.success.rain', {
         amount: points,
         pointsName: await this.getPointsName(points),
       });
@@ -538,7 +538,7 @@ class Points extends System {
         await getRepository(User).save({ ...user, points: user.points + points });
       }
 
-      const message = await prepare('points.success.add', {
+      const message = prepare('points.success.add', {
         amount: points,
         username: username,
         pointsName: await this.getPointsName(points),
@@ -571,7 +571,7 @@ class Points extends System {
         await getRepository(User).save({...user, points: Math.max(user.points - points, 0)});
       }
 
-      const message = await prepare('points.success.remove', {
+      const message = prepare('points.success.remove', {
         amount: points,
         username: username,
         pointsName: await this.getPointsName(points === 'all' ? 0 : points),
